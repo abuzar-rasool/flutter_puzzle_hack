@@ -61,7 +61,7 @@ class Block extends StatelessWidget {
   }) : super(key: key);
 
   Color randomColor() {
-    return Color.fromARGB(255, Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)).withOpacity(1);
+    return Color.fromARGB(255, Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)).withOpacity(0);
   }
 
   @override
