@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'dart:math';
 
@@ -14,53 +16,35 @@ class _MyAppState extends State<MyApp> {
   Offset? center;
   Offset? init;
   double? vertical_offset;
+  double? horizontal_offset;
   Offset? image_dimensions;
   Offset? _scale;
+  Offset? offset;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     center = Offset(250, 250);
     init = Offset(center!.dx - 75.0, center!.dy - 42.5);
-    vertical_offset = 10;
     image_dimensions = Offset(150, 95);
-    _scale = Offset(180, 105);
+    offset = Offset(image_dimensions!.dx - 2, image_dimensions!.dy - 9);
   }
-
-  // double func_f(double x) {
-  //   return (_scale!.dy / _scale!.dx) * x;
-  // }
 
   @override
   Widget build(BuildContext context) {
     List<Widget> blocks = [
-      //1st row
-
-      // center top
-      Block(x: init!.dx, y: init!.dy - image_dimensions!.dy + vertical_offset!),
-
-      // left center
-      Block(
-          x: init!.dx + (image_dimensions!.dx * (_scale!.dy / _scale!.dx)),
-          y: init!.dy -
-              (image_dimensions!.dy * (_scale!.dy / _scale!.dx)) +
-              vertical_offset!),
-
-      // center
+      // first row
+      Block(x: init!.dx, y: init!.dy - offset!.dy),
+      Block(x: init!.dx + offset!.dx / 2, y: init!.dy - offset!.dy / 2),
+      Block(x: init!.dx + offset!.dx, y: init!.dy),
+      //second row
+      Block(x: init!.dx - offset!.dx / 2, y: init!.dy - offset!.dy / 2),
       Block(x: init!.dx, y: init!.dy),
-      // center bottom
-      Block(x: init!.dx, y: init!.dy + image_dimensions!.dy - vertical_offset!),
-
-      // Positioned(top: 100, right: 0, child: Block()),
-      //2nd row
-      // Positioned(top: 65, right: 181, child: Block()),
-      // Positioned(top: 125 - 10, right: 175, child: Block()),
-      // Positioned(top: 135, right: 61, child: Block()),
-      //3rd row
-      // Positioned(top: 100, right: 242, child: Block()),
-      // Positioned(top: 135, right: 182, child: Block()),
-      // Positioned(top: 210 - 10, right: 175, child: Block()),
+      Block(x: init!.dx + offset!.dx / 2, y: init!.dy + offset!.dy / 2),
+      //thrid row
+      Block(x: init!.dx - offset!.dx, y: init!.dy),
+      Block(x: init!.dx - offset!.dx / 2, y: init!.dy + offset!.dy / 2),
+      Block(x: init!.dx, y: init!.dy + offset!.dy, empty: true),
     ];
 
     return MaterialApp(
@@ -91,30 +75,31 @@ class _MyAppState extends State<MyApp> {
 class Block extends StatelessWidget {
   double? x;
   double? y;
+  bool empty;
 
   Block({
     Key? key,
     @required this.x,
     @required this.y,
+    this.empty = false,
   }) : super(key: key);
 
   Color randomColor() {
-    return Color.fromARGB(255, Random().nextInt(255), Random().nextInt(255),
-            Random().nextInt(255))
-        .withOpacity(0.2);
+    return Color.fromARGB(255, Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)).withOpacity(0);
   }
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: this.y,
-      left: this.x,
+    return AnimatedPositioned(
+      duration: Duration(milliseconds: 500),
+      top: y,
+      left: x,
       child: Container(
           color: randomColor(),
           width: 150,
           height: 95,
           alignment: Alignment.center,
-          child: Image.asset('assets/block.png', fit: BoxFit.contain)),
+          child: empty ? Container() : Image.asset('assets/block.png', fit: BoxFit.contain)),
     );
   }
 }
