@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:puzzle_hack/board.dart';
+import 'package:puzzle_hack/board_view.dart';
 
 void main() {
   runApp(const Home());
@@ -12,7 +12,7 @@ class Home extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        body: Board(),
+        body: BoardView(),
       ),
     );
   }
