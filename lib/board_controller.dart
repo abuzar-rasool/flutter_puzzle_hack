@@ -3,6 +3,7 @@
 import 'dart:math';
 
 import 'package:flutter/widgets.dart';
+import 'package:puzzle_hack/block_controller.dart';
 import 'package:puzzle_hack/constants.dart';
 
 class BoardController extends ChangeNotifier {
@@ -12,7 +13,8 @@ class BoardController extends ChangeNotifier {
   late double verticalOffset;
   late double horizontalOffset;
   late Offset offset;
-  late List<Block> blocks = [];
+  late List<bool> visiblities = [];
+  late List<BlockController> blocks = [];
   Map<int, List<int>> blocksToCheck = {
     0: [1, 3],
     1: [0, 2, 4],
@@ -24,7 +26,7 @@ class BoardController extends ChangeNotifier {
     7: [4, 6, 8],
     8: [5, 7],
   };
-  Color get _randomColor => Color.fromARGB(255, Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)).withOpacity(0);
+  Color get _randomColor => Color.fromARGB(255, Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)).withOpacity(1);
 
   BoardController() {
     setValues();
@@ -40,23 +42,50 @@ class BoardController extends ChangeNotifier {
         break;
       }
     }
+    // for (int i = 0; i < blocks.length; i++) {
+    //   if (blocks[i].containsPoint(point)) {
+    //     print(i);
+
+    //     if (!visiblities[i]) {
+    //       move(i, blocksToCheck[i]!.firstWhere((index) => visiblities[index], orElse: () => -1));
+    //     }
+    //     break;
+    //   }
+    // }
   }
 
   move(int? i1, int? i2) {
     // swap block in i1 with i2
     if (i1 != null && i2 != null && i1 != i2 && i1 >= 0 && i2 >= 0) {
-      final blocki1 = blocks[i1].copy();
-      final blocki2 = blocks[i2].copy();
-      final b1pos = blocks[i1].position;
-      final b2pos = blocks[i2].position;
+      // final blocki1 = blocks[i1].copy();
+      // final blocki2 = blocks[i2].copy();
+      // final b1pos = blocks[i1].position;
+      // final b2pos = blocks[i2].position;
+      // blocks.removeAt(i1);
+      // blocks.insert(i1, blocki2);
+      // blocks.removeAt(i2);
+      // blocks.insert(i2, blocki1);
+      // blocki1.position = b2pos;
+      // blocki2.position = b1pos;
+      // blocks[i1].position = blocki2.position;
+      // blocks[i2].position = blocki1.position;
+      //swap blocks
+      // final temp = blocks[i1].copy();
+      // blocks[i1] = blocks[i2].copy();
+      // blocks[i2] = temp.copy();
+      // Offset temp = blocks[i1].position;
+      // blocks[i1].moveTo(blocks[i2].position);
+      // blocks[i2].moveTo(temp);
+      // //swap visiblities
+      // visiblities[i1] = false;
+      // visiblities[i2] = true;
+      // replace blocks by popping and pushing
+      final temp_block_1 = blocks[i1].copy();
+      final temp_block_2 = blocks[i2].copy();
       blocks.removeAt(i1);
-      blocks.insert(i1, blocki2);
+      blocks.insert(i1, temp_block_2);
       blocks.removeAt(i2);
-      blocks.insert(i2, blocki1);
-      blocki1.position = b2pos;
-      blocki2.position = b1pos;
-      blocks[i1].position = blocki2.position;
-      blocks[i2].position = blocki1.position;
+      blocks.insert(i2, temp_block_1);
 
       notifyListeners();
     }
@@ -69,48 +98,20 @@ class BoardController extends ChangeNotifier {
     offset = Offset(imageSize.width - 2, imageSize.height - 9);
     blocks = [
       // first row
-      Block(position: Offset(init.dx, init.dy - offset.dy), orignalIndex: 0, color: _randomColor),
-      Block(position: Offset(init.dx + offset.dx / 2, init.dy - offset.dy / 2), orignalIndex: 1, color: _randomColor),
-      Block(position: Offset(init.dx + offset.dx, init.dy), orignalIndex: 2, color: _randomColor),
+      BlockController(position: Offset(init.dx, init.dy - offset.dy), orignalIndex: 0, color: _randomColor),
+      BlockController(position: Offset(init.dx + offset.dx / 2, init.dy - offset.dy / 2), orignalIndex: 1, color: _randomColor),
+      BlockController(position: Offset(init.dx + offset.dx, init.dy), orignalIndex: 2, color: _randomColor),
       //second row
-      Block(position: Offset(init.dx - offset.dx / 2, init.dy - offset.dy / 2), orignalIndex: 3, color: _randomColor),
-      Block(position: Offset(init.dx, init.dy), orignalIndex: 4, color: _randomColor),
-      Block(position: Offset(init.dx + offset.dx / 2, init.dy + offset.dy / 2), orignalIndex: 5, color: _randomColor),
+      BlockController(position: Offset(init.dx - offset.dx / 2, init.dy - offset.dy / 2), orignalIndex: 3, color: _randomColor),
+      BlockController(position: Offset(init.dx, init.dy), orignalIndex: 4, color: _randomColor),
+      BlockController(position: Offset(init.dx + offset.dx / 2, init.dy + offset.dy / 2), orignalIndex: 5, color: _randomColor),
       //thrid row
-      Block(position: Offset(init.dx - offset.dx, init.dy), orignalIndex: 6, color: _randomColor),
-      Block(position: Offset(init.dx - offset.dx / 2, init.dy + offset.dy / 2), orignalIndex: 7, color: _randomColor),
-      Block(position: Offset(init.dx, init.dy + offset.dy), empty: true, orignalIndex: 8, color: _randomColor),
+      BlockController(position: Offset(init.dx - offset.dx, init.dy), orignalIndex: 6, color: _randomColor),
+      BlockController(position: Offset(init.dx - offset.dx / 2, init.dy + offset.dy / 2), orignalIndex: 7, color: _randomColor),
+      BlockController(position: Offset(init.dx, init.dy + offset.dy), empty: true, orignalIndex: 8, color: _randomColor),
     ];
-  }
-}
-
-class Block {
-  int orignalIndex;
-  Offset position;
-  Color color;
-  bool empty;
-  Block({this.position = Offset.zero, required this.orignalIndex, required this.color, this.empty = false});
-  bool containsPoint(Offset point) {
-    List<Offset> polygon = [
-      Offset(position.dx + imageSize.width / 2, position.dy),
-      Offset(position.dx + imageSize.width, position.dy + imageSize.height / 2),
-      Offset(position.dx + imageSize.width / 2, position.dy + imageSize.height),
-      Offset(position.dx, position.dy + imageSize.height / 2),
-    ];
-    int i, j = polygon.length - 1;
-    bool oddNodes = false;
-    for (i = 0; i < polygon.length; i++) {
-      if (polygon[i].dy < point.dy && polygon[j].dy >= point.dy || polygon[j].dy < point.dy && polygon[i].dy >= point.dy) {
-        if (polygon[i].dx + (point.dy - polygon[i].dy) / (polygon[j].dy - polygon[i].dy) * (polygon[j].dx - polygon[i].dx) < point.dx) {
-          oddNodes = !oddNodes;
-        }
-      }
-      j = i;
+    for (BlockController blockController in blocks) {
+      visiblities.add(blockController.empty);
     }
-    return oddNodes;
-  }
-
-  copy() {
-    return Block(position: position, orignalIndex: orignalIndex, color: color, empty: empty);
   }
 }
