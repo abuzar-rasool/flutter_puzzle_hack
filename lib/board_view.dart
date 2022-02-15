@@ -21,13 +21,7 @@ class _BoardViewState extends State<BoardView> {
     super.initState();
   }
 
-  List<BlockView> generateBlockViews() {
-    List<BlockView> blockViews = [];
-    for (int i = 0; i < 9; i++) {
-      blockViews.add(BlockView(index: i));
-    }
-    return blockViews;
-  }
+  
 
   @override
   Widget build(BuildContext _) {
@@ -60,7 +54,7 @@ class _BoardViewState extends State<BoardView> {
                         context.read<BoardController>().pointPosition(details.localPosition);
                       },
                       child: Stack(
-                        children: generateBlockViews(),
+                        children: context.watch<BoardController>().blocks,
                       ),
                     ),
                   ),

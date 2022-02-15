@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 import 'package:puzzle_hack/block_controller.dart';
+import 'package:puzzle_hack/block_view.dart';
 import 'package:puzzle_hack/constants.dart';
 
 class BoardController extends ChangeNotifier {
@@ -14,7 +15,7 @@ class BoardController extends ChangeNotifier {
   late double horizontalOffset;
   late Offset offset;
   late List<bool> visiblities = [];
-  late List<BlockController> blocks = [];
+  late List<BlockView> blocks = [];
   Map<int, List<int>> blocksToCheck = {
     0: [1, 3],
     1: [0, 2, 4],
@@ -80,13 +81,10 @@ class BoardController extends ChangeNotifier {
       // visiblities[i1] = false;
       // visiblities[i2] = true;
       // replace blocks by popping and pushing
-      final temp_block_1 = blocks[i1].copy();
-      final temp_block_2 = blocks[i2].copy();
-      blocks.removeAt(i1);
-      blocks.insert(i1, temp_block_2);
-      blocks.removeAt(i2);
-      blocks.insert(i2, temp_block_1);
-
+      final tempBlock1 = BlockView(position: blocks[i2].position, color: blocks[i1].color, empty: blocks[i1].empty);
+      final tempBlock2 = BlockView(position: blocks[i1].position, color: blocks[i2].color, empty: blocks[i2].empty);
+      blocks[i1] = tempBlock1;
+      blocks[i2] = tempBlock2;
       notifyListeners();
     }
   }
@@ -98,20 +96,17 @@ class BoardController extends ChangeNotifier {
     offset = Offset(imageSize.width - 2, imageSize.height - 9);
     blocks = [
       // first row
-      BlockController(position: Offset(init.dx, init.dy - offset.dy), orignalIndex: 0, color: _randomColor),
-      BlockController(position: Offset(init.dx + offset.dx / 2, init.dy - offset.dy / 2), orignalIndex: 1, color: _randomColor),
-      BlockController(position: Offset(init.dx + offset.dx, init.dy), orignalIndex: 2, color: _randomColor),
+      BlockView(position: Offset(init.dx, init.dy - offset.dy), color: _randomColor),
+      BlockView(position: Offset(init.dx + offset.dx / 2, init.dy - offset.dy / 2), color: _randomColor),
+      BlockView(position: Offset(init.dx + offset.dx, init.dy), color: _randomColor),
       //second row
-      BlockController(position: Offset(init.dx - offset.dx / 2, init.dy - offset.dy / 2), orignalIndex: 3, color: _randomColor),
-      BlockController(position: Offset(init.dx, init.dy), orignalIndex: 4, color: _randomColor),
-      BlockController(position: Offset(init.dx + offset.dx / 2, init.dy + offset.dy / 2), orignalIndex: 5, color: _randomColor),
+      BlockView(position: Offset(init.dx - offset.dx / 2, init.dy - offset.dy / 2), color: _randomColor),
+      BlockView(position: Offset(init.dx, init.dy), color: _randomColor),
+      BlockView(position: Offset(init.dx + offset.dx / 2, init.dy + offset.dy / 2), color: _randomColor),
       //thrid row
-      BlockController(position: Offset(init.dx - offset.dx, init.dy), orignalIndex: 6, color: _randomColor),
-      BlockController(position: Offset(init.dx - offset.dx / 2, init.dy + offset.dy / 2), orignalIndex: 7, color: _randomColor),
-      BlockController(position: Offset(init.dx, init.dy + offset.dy), empty: true, orignalIndex: 8, color: _randomColor),
+      BlockView(position: Offset(init.dx - offset.dx, init.dy), color: _randomColor),
+      BlockView(position: Offset(init.dx - offset.dx / 2, init.dy + offset.dy / 2), color: _randomColor),
+      BlockView(position: Offset(init.dx, init.dy + offset.dy), empty: true, color: _randomColor),
     ];
-    for (BlockController blockController in blocks) {
-      visiblities.add(blockController.empty);
-    }
   }
 }
