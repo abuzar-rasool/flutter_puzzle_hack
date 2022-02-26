@@ -1,20 +1,15 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:puzzle_hack/tiles.dart';
+import 'package:puzzle_hack/board_view.dart';
 
-class Home extends StatefulWidget {
-  const Home({ Key? key }) : super(key: key);
-
-  @override
-  _HomeState createState() => _HomeState();
-}
-
-class _HomeState extends State<Home> {
+class Home extends StatelessWidget {
+  const Home({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color.fromARGB(255, 0, 0, 0),
-      body: Tiles(),
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        body: BoardView(),
+      ),
     );
   }
 }

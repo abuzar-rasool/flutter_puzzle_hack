@@ -32,8 +32,7 @@ dependencies:
     sdk: flutter
   provider: ^6.0.2
   responsive_framework: ^0.1.5
-  flame: 1.0.0
-  flame_tiled: ^1.2.1
+
 
 dev_dependencies:
 
@@ -58,12 +57,16 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/block.png
-    - assets/tiles/map.tmx
-    - assets/images/selector-short.png
-    - assets/images/selector.png
-    - assets/images/tiles-short.png
-    - assets/images/tiles.png
+    - assets/block-1.png
+    - assets/block-2.png
+    - assets/block-3.png
+    - assets/block-4.png
+    - assets/block-5.png
+    - assets/block-6.png
+    - assets/block-7.png
+    - assets/block-8.png
+    - assets/empty.png
+    
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see
