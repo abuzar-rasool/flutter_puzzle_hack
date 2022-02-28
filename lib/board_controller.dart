@@ -1,39 +1,74 @@
-import 'dart:math';
-
 import 'package:flutter/widgets.dart';
 import 'package:puzzle_hack/block_controller.dart';
 import 'package:puzzle_hack/constants.dart';
 
 class BoardController extends ChangeNotifier {
+  // allows to control the touch on the board
   bool enabled = true;
+  //position of the center block on the board
+  late Offset _init;
+  //the overlaps of the blocks on the board
+  late Offset _offset;
+  //list of blocks on the board
   late List<BlockController> blocks = [];
-  BoardController() {
-    setValues();
-  }
-  List<List<int>> blockPositions = [];
 
+  BoardController() {
+    _init = Offset(kBoardSize.width / 2 - kImageSize.width / 2, kBoardSize.height / 2 - kImageSize.height / 2);
+    _offset = Offset(kImageSize.width - 2, kImageSize.height - 9);
+    blocks = [
+      // first row
+      BlockController(globalPosition: Offset(_init.dx, _init.dy - _offset.dy), imageName: 'block-1.png'),
+      BlockController(globalPosition: Offset(_init.dx + _offset.dx / 2, _init.dy - _offset.dy / 2), imageName: 'block-2.png'),
+      BlockController(globalPosition: Offset(_init.dx + _offset.dx, _init.dy), imageName: 'block-3.png'),
+      //second row
+      BlockController(globalPosition: Offset(_init.dx - _offset.dx / 2, _init.dy - _offset.dy / 2), imageName: 'block-4.png'),
+      BlockController(globalPosition: Offset(_init.dx, _init.dy), imageName: 'block-5.png'),
+      BlockController(globalPosition: Offset(_init.dx + _offset.dx / 2, _init.dy + _offset.dy / 2), imageName: 'block-6.png'),
+      //thrid row
+      BlockController(globalPosition: Offset(_init.dx - _offset.dx, _init.dy), imageName: 'block-7.png'),
+      BlockController(globalPosition: Offset(_init.dx - _offset.dx / 2, _init.dy + _offset.dy / 2), imageName: 'block-8.png'),
+      BlockController(globalPosition: Offset(_init.dx, _init.dy + _offset.dy)),
+    ];
+  }
+
+  // detect and find the source(containing the point) and target(empty) blocks
+  // if both are adjecaent to each other makes the move
   Future<void> detectAndMove(Offset point) async {
     if (enabled) {
-      for (int i = 0; i < blocks.length; i++) {
-        if (blocks[i].containsPoint(point)) {
-          if (!blocks[i].empty) {
-            for (int j = 0; j < blocks.length; j++) {
-              if (blocks[j].empty) {
-                Direction? direction = directionOfAdjacentBlock(j, i);
-                if (direction != null) {
-                  await move(i, j, direction);
-                }
-                break;
-              }
-            }
-          }
-          break;
+      int? sourceBlockIndex = _getBlockIndex(point);
+      int? targetBlockIndex = _getEmptyBlockIndex();
+      if (sourceBlockIndex != null && targetBlockIndex != null) {
+        Direction? direction = _directionOfAdjacentBlock(sourceBlockIndex, targetBlockIndex);
+        if (direction != null) {
+          _move(sourceBlockIndex, targetBlockIndex, direction);
         }
       }
     }
   }
 
-  directionOfAdjacentBlock(int source, int target) {
+  //returns the index of the non empty block in blocks at given point
+  int? _getBlockIndex(Offset point) {
+    for (int i = 0; i < blocks.length; i++) {
+      if (!blocks[i].empty && blocks[i].containsPoint(point)) {
+        return i;
+      }
+    }
+    return null;
+  }
+
+  //returns the index of the empty block in blocks
+  int? _getEmptyBlockIndex() {
+    for (int i = 0; i < blocks.length; i++) {
+      if (blocks[i].empty) {
+        return i;
+      }
+    }
+    return null;
+  }
+
+  // returns the direction of the adjacent block of the source block
+  // if the source and target blocks are not adjacent, returns null
+  Direction? _directionOfAdjacentBlock(int target, int source) {
     int sourceX = source ~/ 3;
     int sourceY = source % 3;
     int targetX = target ~/ 3;
@@ -51,68 +86,45 @@ class BoardController extends ChangeNotifier {
         return Direction.down;
       }
     }
+    return null;
   }
 
-  move(int? fullBlockIndex, int? emptyBlockIndex, Direction direction) async {
-    enabled = false;
-    Offset entryOffset = Offset.zero;
-    Offset exitOffset = Offset.zero;
-    if (direction == Direction.down) {
-      entryOffset = const Offset(-6, -81);
-      exitOffset = const Offset(6, 81);
-    } else if (direction == Direction.up) {
-      entryOffset = const Offset(6, 81);
-      exitOffset = const Offset(-6, -81);
-    } else if (direction == Direction.left) {
-      entryOffset = const Offset(81, 6);
-      exitOffset = const Offset(-81, -6);
-    } else if (direction == Direction.right) {
-      entryOffset = const Offset(-81, -6);
-      exitOffset = const Offset(81, 6);
-    }
+  _move(int? fullBlockIndex, int? emptyBlockIndex, Direction direction) async {
     final fullBlock = blocks[fullBlockIndex!];
     final emptyBlock = blocks[emptyBlockIndex!];
+    Offset movementOffset = Offset(
+      direction == Direction.left || direction == Direction.right ? 80 : 6.5,
+      direction == Direction.left || direction == Direction.right ? 6.5 : 80,
+    );
+    if (direction == Direction.right || direction == Direction.down) {
+      movementOffset = -movementOffset;
+    }
+
+    enabled = false;
     emptyBlock.animate = false;
-    emptyBlock.localPosition = cartesianToIsometric(entryOffset);
+    emptyBlock.localPosition = _cartesianToIsometric(movementOffset);
     emptyBlock.imageName = fullBlock.imageName;
     notifyListeners();
-    await Future.delayed(const Duration(microseconds: 1));
+    await Future.delayed(const Duration(microseconds: 100));
     //move
     emptyBlock.animate = true;
-    emptyBlock.localPosition = cartesianToIsometric(Offset.zero);
-    fullBlock.localPosition = cartesianToIsometric(exitOffset);
+    emptyBlock.localPosition = _cartesianToIsometric(Offset.zero);
+    fullBlock.localPosition = _cartesianToIsometric(-movementOffset);
+    notifyListeners();
+    await Future.delayed(const Duration(milliseconds: 600));
+    fullBlock.animate = false;
+    notifyListeners();
+    await Future.delayed(const Duration(milliseconds: 100));
+    fullBlock.imageName = null;
+    fullBlock.localPosition = _cartesianToIsometric(Offset.zero);
+    emptyBlock.animate = true;
+    notifyListeners();
+    await Future.delayed(const Duration(milliseconds: 100));
     enabled = true;
     notifyListeners();
-    await Future.delayed(const Duration(milliseconds: 1200));
-    fullBlock.imageName = null;
-    fullBlock.localPosition = cartesianToIsometric(Offset.zero);
   }
 
-  setValues() {
-    Offset center = const Offset(250, 250);
-    Offset init = Offset(center.dx - kImageSize.width / 2, center.dy - kImageSize.height / 2);
-    Offset offset = Offset(kImageSize.width - 2, kImageSize.height - 9);
-    blocks = [
-      // first row
-      BlockController(globalPosition: Offset(init.dx, init.dy - offset.dy), imageName: 'block-1.png'),
-      BlockController(globalPosition: Offset(init.dx + offset.dx / 2, init.dy - offset.dy / 2), imageName: 'block-2.png'),
-      BlockController(globalPosition: Offset(init.dx + offset.dx, init.dy), imageName: 'block-3.png'),
-      //second row
-      BlockController(globalPosition: Offset(init.dx - offset.dx / 2, init.dy - offset.dy / 2), imageName: 'block-4.png'),
-      BlockController(globalPosition: Offset(init.dx, init.dy), imageName: 'block-5.png'),
-      BlockController(globalPosition: Offset(init.dx + offset.dx / 2, init.dy + offset.dy / 2), imageName: 'block-6.png'),
-      //thrid row
-      BlockController(globalPosition: Offset(init.dx - offset.dx, init.dy), imageName: 'block-7.png'),
-      BlockController(globalPosition: Offset(init.dx - offset.dx / 2, init.dy + offset.dy / 2), imageName: 'block-8.png'),
-      BlockController(globalPosition: Offset(init.dx, init.dy + offset.dy)),
-    ];
-  }
-
-  Offset cartesianToIsometric(Offset point) {
+  Offset _cartesianToIsometric(Offset point) {
     return Offset(point.dx - point.dy, (point.dx + point.dy) / 2);
-  }
-
-  Offset isometricToCartesian(Offset point) {
-    return Offset(point.dx + point.dy, (point.dx - point.dy) / 2);
   }
 }

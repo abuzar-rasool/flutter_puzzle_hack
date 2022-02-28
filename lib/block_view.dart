@@ -31,7 +31,7 @@ class BlockView extends StatelessWidget {
               AnimatedPositioned(
                 top: blockController.localPosition.dy,
                 left: blockController.localPosition.dx,
-                duration: blockController.animate ? const Duration(milliseconds: 1000) : Duration.zero,
+                duration: blockController.animate ? const Duration(milliseconds: 300) : Duration.zero,
                 child: Image.asset(
                   blockController.imageName ?? 'assets/empty.png',
                   fit: BoxFit.contain,

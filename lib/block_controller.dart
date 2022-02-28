@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:puzzle_hack/constants.dart';
 
@@ -15,7 +17,7 @@ class BlockController extends ChangeNotifier {
 
   BlockController({this.globalPosition = Offset.zero, this.imageName})
       : localPosition = Offset.zero,
-        color = Colors.transparent;
+        color = Color.fromARGB(255, Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)).withOpacity(0);
 
   bool containsPoint(Offset point) {
     List<Offset> polygon = [
