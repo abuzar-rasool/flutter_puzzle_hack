@@ -74,15 +74,3 @@ class _BoardViewState extends State<BoardView> {
         });
   }
 }
-
-// class AnimatedTransitionedImage extends StatelessWidget {
-//   final String image;
-
-//   final AnimationType;
-
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }

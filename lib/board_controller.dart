@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:puzzle_hack/block_controller.dart';
 import 'package:puzzle_hack/constants.dart';
+import 'package:puzzle_hack/direction.dart';
 
 class BoardController extends ChangeNotifier {
   // allows to control the touch on the board
@@ -99,7 +100,6 @@ class BoardController extends ChangeNotifier {
     if (direction == Direction.right || direction == Direction.down) {
       movementOffset = -movementOffset;
     }
-
     enabled = false;
     emptyBlock.animate = false;
     emptyBlock.localPosition = _cartesianToIsometric(movementOffset);
