@@ -90,6 +90,7 @@ class BoardController extends ChangeNotifier {
     return null;
   }
 
+  //used for the animating the block to their new position in the defined direction
   _move(int? fullBlockIndex, int? emptyBlockIndex, Direction direction) async {
     final fullBlock = blocks[fullBlockIndex!];
     final emptyBlock = blocks[emptyBlockIndex!];
