@@ -2,8 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:puzzle_hack/board_controller.dart';
-import 'package:puzzle_hack/block_view.dart';
+import 'package:puzzle_hack/controllers/board_controller.dart';
+import 'package:puzzle_hack/views/block_view.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 class BoardView extends StatefulWidget {

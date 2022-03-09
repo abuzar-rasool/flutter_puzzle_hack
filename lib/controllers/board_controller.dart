@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:puzzle_hack/block_controller.dart';
+import 'package:puzzle_hack/model/block.dart';
 import 'package:puzzle_hack/constants.dart';
 import 'package:puzzle_hack/direction.dart';
 
@@ -11,24 +11,24 @@ class BoardController extends ChangeNotifier {
   //the overlaps of the blocks on the board
   late Offset _offset;
   //list of blocks on the board
-  late List<BlockController> blocks = [];
+  late List<Block> blocks = [];
 
   BoardController() {
     _init = Offset(kBoardSize.width / 2 - kImageSize.width / 2, kBoardSize.height / 2 - kImageSize.height / 2);
     _offset = Offset(kImageSize.width - 2, kImageSize.height - 9);
     blocks = [
       // first row
-      BlockController(globalPosition: Offset(_init.dx, _init.dy - _offset.dy), imageName: 'block-1.png'),
-      BlockController(globalPosition: Offset(_init.dx + _offset.dx / 2, _init.dy - _offset.dy / 2), imageName: 'block-2.png'),
-      BlockController(globalPosition: Offset(_init.dx + _offset.dx, _init.dy), imageName: 'block-3.png'),
+      Block(globalPosition: Offset(_init.dx, _init.dy - _offset.dy), imageName: 'block-1.png'),
+      Block(globalPosition: Offset(_init.dx + _offset.dx / 2, _init.dy - _offset.dy / 2), imageName: 'block-2.png'),
+      Block(globalPosition: Offset(_init.dx + _offset.dx, _init.dy), imageName: 'block-3.png'),
       //second row
-      BlockController(globalPosition: Offset(_init.dx - _offset.dx / 2, _init.dy - _offset.dy / 2), imageName: 'block-4.png'),
-      BlockController(globalPosition: Offset(_init.dx, _init.dy), imageName: 'block-5.png'),
-      BlockController(globalPosition: Offset(_init.dx + _offset.dx / 2, _init.dy + _offset.dy / 2), imageName: 'block-6.png'),
+      Block(globalPosition: Offset(_init.dx - _offset.dx / 2, _init.dy - _offset.dy / 2), imageName: 'block-4.png'),
+      Block(globalPosition: Offset(_init.dx, _init.dy), imageName: 'block-5.png'),
+      Block(globalPosition: Offset(_init.dx + _offset.dx / 2, _init.dy + _offset.dy / 2), imageName: 'block-6.png'),
       //thrid row
-      BlockController(globalPosition: Offset(_init.dx - _offset.dx, _init.dy), imageName: 'block-7.png'),
-      BlockController(globalPosition: Offset(_init.dx - _offset.dx / 2, _init.dy + _offset.dy / 2), imageName: 'block-8.png'),
-      BlockController(globalPosition: Offset(_init.dx, _init.dy + _offset.dy)),
+      Block(globalPosition: Offset(_init.dx - _offset.dx, _init.dy), imageName: 'block-7.png'),
+      Block(globalPosition: Offset(_init.dx - _offset.dx / 2, _init.dy + _offset.dy / 2), imageName: 'block-8.png'),
+      Block(globalPosition: Offset(_init.dx, _init.dy + _offset.dy)),
     ];
   }
 
@@ -129,3 +129,4 @@ class BoardController extends ChangeNotifier {
     return Offset(point.dx - point.dy, (point.dx + point.dy) / 2);
   }
 }
+

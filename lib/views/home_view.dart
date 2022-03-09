@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:puzzle_hack/board_view.dart';
+import 'package:puzzle_hack/views/board_view.dart';
 
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+class HomeView extends StatelessWidget {
+  const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
-import 'package:puzzle_hack/board_controller.dart';
+import 'package:puzzle_hack/controllers/board_controller.dart';
 import 'package:puzzle_hack/constants.dart';
 
 class BlockView extends StatelessWidget {

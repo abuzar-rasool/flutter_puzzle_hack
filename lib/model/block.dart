@@ -1,13 +1,8 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:puzzle_hack/constants.dart';
+import 'package:puzzle_hack/helper_functions.dart';
 
-enum MoveType { moveIn, moveOut }
-
-enum MoveDirection { left, right, up, down }
-
-class BlockController extends ChangeNotifier {
+class Block{
   bool animate = true;
   final Offset globalPosition;
   String? imageName;
@@ -15,9 +10,9 @@ class BlockController extends ChangeNotifier {
   Color color;
   bool get empty => imageName == null;
 
-  BlockController({this.globalPosition = Offset.zero, this.imageName})
+  Block({this.globalPosition = Offset.zero, this.imageName})
       : localPosition = Offset.zero,
-        color = Color.fromARGB(255, Random().nextInt(255), Random().nextInt(255), Random().nextInt(255)).withOpacity(0);
+        color = HelperFunctions.randomColor().withOpacity(kBlockOpacity);
 
   bool containsPoint(Offset point) {
     List<Offset> polygon = [
