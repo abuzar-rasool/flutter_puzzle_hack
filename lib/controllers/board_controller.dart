@@ -41,7 +41,7 @@ class BoardController extends ChangeNotifier {
       if (sourceBlockIndex != null && targetBlockIndex != null) {
         Direction? direction = _directionOfAdjacentBlock(sourceBlockIndex, targetBlockIndex);
         if (direction != null) {
-          _move(sourceBlockIndex, targetBlockIndex, direction);
+          await _move(sourceBlockIndex, targetBlockIndex, direction);
         }
       }
     }
@@ -101,26 +101,29 @@ class BoardController extends ChangeNotifier {
     if (direction == Direction.right || direction == Direction.down) {
       movementOffset = -movementOffset;
     }
+    print('------------------');
+    print("Moving $fullBlockIndex to $emptyBlockIndex in direction $direction");
+    //taking the empty block to the current full block.
     enabled = false;
     emptyBlock.animate = false;
     emptyBlock.localPosition = _cartesianToIsometric(movementOffset);
     emptyBlock.imageName = fullBlock.imageName;
     notifyListeners();
-    await Future.delayed(const Duration(microseconds: 100));
-    //move
+    await Future.delayed(const Duration(milliseconds: 50));
+    //move the empty block to the target block position.
     emptyBlock.animate = true;
     emptyBlock.localPosition = _cartesianToIsometric(Offset.zero);
     fullBlock.localPosition = _cartesianToIsometric(-movementOffset);
     notifyListeners();
-    await Future.delayed(const Duration(milliseconds: 600));
+    await Future.delayed(const Duration(milliseconds: 300));
     fullBlock.animate = false;
     notifyListeners();
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 50));
     fullBlock.imageName = null;
     fullBlock.localPosition = _cartesianToIsometric(Offset.zero);
     emptyBlock.animate = true;
     notifyListeners();
-    await Future.delayed(const Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 50));
     enabled = true;
     notifyListeners();
   }
@@ -129,4 +132,3 @@ class BoardController extends ChangeNotifier {
     return Offset(point.dx - point.dy, (point.dx + point.dy) / 2);
   }
 }
-

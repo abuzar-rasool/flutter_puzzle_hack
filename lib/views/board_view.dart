@@ -59,7 +59,9 @@ class _BoardViewState extends State<BoardView> {
                       height: MediaQuery.of(context).size.height,
                       child: GestureDetector(
                         onTapDown: (TapDownDetails details) async {
-                          await context.read<BoardController>().detectAndMove(details.localPosition);
+                          if (context.read<BoardController>().enabled) {
+                            await context.read<BoardController>().detectAndMove(details.localPosition);
+                          }
                         },
                         child: Stack(
                           children: generateBlockViews(),
