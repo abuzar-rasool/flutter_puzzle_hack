@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:puzzle_hack/model/block.dart';
@@ -48,7 +50,7 @@ class BoardController extends ChangeNotifier {
     return count % 2 == 0;
   }
 
-  void resetBoardController () {
+  void resetBoardController() {
     enabled = true;
     winState = false;
     blocks = [];
@@ -59,20 +61,19 @@ class BoardController extends ChangeNotifier {
   List<int> shuffleBlocks() {
     List<int> shuffled = [];
     bool shuffling = true;
-    while (shuffling){
+    while (shuffling) {
       int i = Random().nextInt(9) + 1;
-      if (!shuffled.contains(i)){
+      if (!shuffled.contains(i)) {
         shuffled.add(i);
       }
-      if (shuffled.length == 9){
+      if (shuffled.length == 9) {
         bool solvable = isSolvable(shuffled);
-        if (solvable){
+        if (solvable) {
           shuffling = false;
         } else {
           shuffled = [];
         }
       }
-
     }
     return shuffled;
   }
@@ -137,11 +138,11 @@ class BoardController extends ChangeNotifier {
 
   bool checkForWin() {
     bool won = true;
-    blocks.forEach((element) {
+    for (var element in blocks) {
       if (element.currentPlace != element.truePlace) {
         won = false;
       }
-    });
+    }
     return won;
   }
 
