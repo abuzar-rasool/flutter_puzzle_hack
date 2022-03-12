@@ -8,6 +8,7 @@ class HomeView extends StatelessWidget {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        backgroundColor: Color.fromARGB(255, 36, 36, 36),
         body: BoardView(),
       ),
     );

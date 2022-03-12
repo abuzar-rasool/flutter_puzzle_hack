@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:puzzle_hack/model/block.dart';
 import 'package:puzzle_hack/constants.dart';
@@ -6,6 +7,7 @@ import 'package:puzzle_hack/direction.dart';
 class BoardController extends ChangeNotifier {
   // allows to control the touch on the board
   bool enabled = true;
+  bool winState = false;
   //position of the center block on the board
   late Offset _init;
   //the overlaps of the blocks on the board
@@ -16,20 +18,63 @@ class BoardController extends ChangeNotifier {
   BoardController() {
     _init = Offset(kBoardSize.width / 2 - kImageSize.width / 2, kBoardSize.height / 2 - kImageSize.height / 2);
     _offset = Offset(kImageSize.width - 2, kImageSize.height - 9);
+    List<int> shuffled = shuffleBlocks();
     blocks = [
       // first row
-      Block(globalPosition: Offset(_init.dx, _init.dy - _offset.dy), imageName: 'block-1.png'),
-      Block(globalPosition: Offset(_init.dx + _offset.dx / 2, _init.dy - _offset.dy / 2), imageName: 'block-2.png'),
-      Block(globalPosition: Offset(_init.dx + _offset.dx, _init.dy), imageName: 'block-3.png'),
+      Block(globalPosition: Offset(_init.dx, _init.dy - _offset.dy), currentPlace: shuffled[0], truePlace: 1),
+      Block(globalPosition: Offset(_init.dx + _offset.dx / 2, _init.dy - _offset.dy / 2), currentPlace: shuffled[1], truePlace: 2),
+      Block(globalPosition: Offset(_init.dx + _offset.dx, _init.dy), currentPlace: shuffled[2], truePlace: 3),
       //second row
-      Block(globalPosition: Offset(_init.dx - _offset.dx / 2, _init.dy - _offset.dy / 2), imageName: 'block-4.png'),
-      Block(globalPosition: Offset(_init.dx, _init.dy), imageName: 'block-5.png'),
-      Block(globalPosition: Offset(_init.dx + _offset.dx / 2, _init.dy + _offset.dy / 2), imageName: 'block-6.png'),
+      Block(globalPosition: Offset(_init.dx - _offset.dx / 2, _init.dy - _offset.dy / 2), currentPlace: shuffled[3], truePlace: 4),
+      Block(globalPosition: Offset(_init.dx, _init.dy), currentPlace: shuffled[4], truePlace: 5),
+      Block(globalPosition: Offset(_init.dx + _offset.dx / 2, _init.dy + _offset.dy / 2), currentPlace: shuffled[5], truePlace: 6),
       //thrid row
-      Block(globalPosition: Offset(_init.dx - _offset.dx, _init.dy), imageName: 'block-7.png'),
-      Block(globalPosition: Offset(_init.dx - _offset.dx / 2, _init.dy + _offset.dy / 2), imageName: 'block-8.png'),
-      Block(globalPosition: Offset(_init.dx, _init.dy + _offset.dy)),
+      Block(globalPosition: Offset(_init.dx - _offset.dx, _init.dy), currentPlace: shuffled[6], truePlace: 7),
+      Block(globalPosition: Offset(_init.dx - _offset.dx / 2, _init.dy + _offset.dy / 2), currentPlace: shuffled[7], truePlace: 8),
+      Block(globalPosition: Offset(_init.dx, _init.dy + _offset.dy), currentPlace: shuffled[8], truePlace: 9),
     ];
+  }
+
+  bool isSolvable(List<int> list) {
+    int count = 0;
+    int emptyVal = 8;
+    for (int i = 0; i < list.length; i++) {
+      for (int j = i + 1; j < list.length; j++) {
+        if (list[i] > list[j] && list[j] != emptyVal && list[i] != emptyVal) {
+          count++;
+        }
+      }
+    }
+    return count % 2 == 0;
+  }
+
+  void resetBoardController () {
+    enabled = true;
+    winState = false;
+    blocks = [];
+    BoardController();
+    notifyListeners();
+  }
+
+  List<int> shuffleBlocks() {
+    List<int> shuffled = [];
+    bool shuffling = true;
+    while (shuffling){
+      int i = Random().nextInt(9) + 1;
+      if (!shuffled.contains(i)){
+        shuffled.add(i);
+      }
+      if (shuffled.length == 9){
+        bool solvable = isSolvable(shuffled);
+        if (solvable){
+          shuffling = false;
+        } else {
+          shuffled = [];
+        }
+      }
+
+    }
+    return shuffled;
   }
 
   // detect and find the source(containing the point) and target(empty) blocks
@@ -90,6 +135,16 @@ class BoardController extends ChangeNotifier {
     return null;
   }
 
+  bool checkForWin() {
+    bool won = true;
+    blocks.forEach((element) {
+      if (element.currentPlace != element.truePlace) {
+        won = false;
+      }
+    });
+    return won;
+  }
+
   //used for the animating the block to their new position in the defined direction
   _move(int? fullBlockIndex, int? emptyBlockIndex, Direction direction) async {
     final fullBlock = blocks[fullBlockIndex!];
@@ -124,7 +179,10 @@ class BoardController extends ChangeNotifier {
     emptyBlock.animate = true;
     notifyListeners();
     await Future.delayed(const Duration(milliseconds: 50));
+    emptyBlock.currentPlace = fullBlock.currentPlace;
+    fullBlock.currentPlace = 9;
     enabled = true;
+    winState = checkForWin();
     notifyListeners();
   }
 

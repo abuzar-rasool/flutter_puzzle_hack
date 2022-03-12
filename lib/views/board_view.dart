@@ -34,6 +34,12 @@ class _BoardViewState extends State<BoardView> {
     return ChangeNotifierProvider(
         create: (_) => BoardController(),
         builder: (context, child) {
+          if (context.watch<BoardController>().winState) {
+            return AlertDialog(
+              title: Text("You Won!"),  
+              content: Text("This is an alert message."),
+            );
+          }
           return Center(
             child: Column(
               mainAxisSize: MainAxisSize.max,
@@ -41,12 +47,12 @@ class _BoardViewState extends State<BoardView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 ResponsiveWrapper(
-                  backgroundColor: Colors.blue.shade100,
-                  maxWidth: 1200,
-                  minWidth: 480,
+                  backgroundColor: Color.fromARGB(255, 36, 36, 36).withOpacity(1),
+                  maxWidth: 2460,
+                  minWidth: 400,
                   defaultScale: true,
                   breakpoints: const [
-                    ResponsiveBreakpoint.resize(480, name: MOBILE),
+                    ResponsiveBreakpoint.resize(400, name: MOBILE),
                     ResponsiveBreakpoint.resize(800, name: TABLET),
                     ResponsiveBreakpoint.resize(1000, name: DESKTOP),
                     ResponsiveBreakpoint.resize(2460, name: '4K'),
@@ -54,9 +60,9 @@ class _BoardViewState extends State<BoardView> {
                   child: AbsorbPointer(
                     absorbing: !context.watch<BoardController>().enabled,
                     child: Container(
-                      color: Colors.blue.withOpacity(0.2),
+                      color: Color.fromARGB(255, 36, 36, 36).withOpacity(1),
                       width: 500,
-                      height: MediaQuery.of(context).size.height,
+                      height: 500,
                       child: GestureDetector(
                         onTapDown: (TapDownDetails details) async {
                           if (context.read<BoardController>().enabled) {

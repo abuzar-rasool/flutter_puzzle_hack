@@ -14,14 +14,15 @@ class BlockView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final blockController = context.watch<BoardController>().blocks[index];
+    final blockController = context.watch<BoardController>();
+    final block = blockController.blocks[index];
     return Positioned(
-      top: blockController.globalPosition.dy,
-      left: blockController.globalPosition.dx,
+      top: block.globalPosition.dy,
+      left: block.globalPosition.dx,
       child: AbsorbPointer(
         absorbing: !context.watch<BoardController>().enabled,
         child: Container(
-          color: blockController.color,
+          color: block.color,
           width: kImageSize.width,
           height: kImageSize.height,
           child: Stack(
@@ -29,11 +30,11 @@ class BlockView extends StatelessWidget {
             clipBehavior: Clip.hardEdge,
             children: [
               AnimatedPositioned(
-                top: blockController.localPosition.dy,
-                left: blockController.localPosition.dx,
-                duration: blockController.animate ? const Duration(milliseconds: 300) : Duration.zero,
+                top: block.localPosition.dy,
+                left: block.localPosition.dx,
+                duration: block.animate ? const Duration(milliseconds: 300) : Duration.zero,
                 child: Image.asset(
-                  blockController.imageName ?? 'assets/empty.png',
+                  block.imageName ?? 'assets/empty.png',
                   fit: BoxFit.contain,
                   width: kImageSize.width,
                   height: kImageSize.height,

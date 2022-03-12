@@ -7,12 +7,16 @@ class Block{
   final Offset globalPosition;
   String? imageName;
   Offset localPosition;
+  int? currentPlace;
+  int? truePlace;
   Color color;
   bool get empty => imageName == null;
 
-  Block({this.globalPosition = Offset.zero, this.imageName})
+  Block({this.globalPosition = Offset.zero, this.truePlace, this.currentPlace})
       : localPosition = Offset.zero,
-        color = HelperFunctions.randomColor().withOpacity(kBlockOpacity);
+        color = HelperFunctions.randomColor().withOpacity(kBlockOpacity),
+        imageName = currentPlace == 9 ? null : "block-$currentPlace.png";
+
 
   bool containsPoint(Offset point) {
     List<Offset> polygon = [
