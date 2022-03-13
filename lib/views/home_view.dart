@@ -8,8 +8,14 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) { 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        fontFamily: "HammersmithOne"
+      ),
       builder: (context, widget) => ResponsiveWrapper.builder(
-          const BoardView(),
+          Scaffold(
+            backgroundColor: Color.fromARGB(255, 36, 36, 36),
+            body:
+              BoardView()),
           maxWidth: 2000,
           minWidth: 450,
           defaultScale: true,

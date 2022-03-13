@@ -8,8 +8,11 @@ import 'package:puzzle_hack/direction.dart';
 
 class BoardController extends ChangeNotifier {
   // allows to control the touch on the board
-  bool enabled = true;
+  bool enabled = false;
   bool winState = false;
+  bool gameStarted = false;
+  int movesCount = 0;
+  int cps = 0;   // correct placements
   //position of the center block on the board
   late Offset _init;
   //the overlaps of the blocks on the board
@@ -22,6 +25,9 @@ class BoardController extends ChangeNotifier {
   }
 
   void initializeBoard() {
+    winState = false;
+    movesCount = 0;
+    cps = 0;
     _init = Offset(kBoardSize.width / 2 - kImageSize.width / 2, kBoardSize.height / 2 - kImageSize.height / 2);
     _offset = Offset(kImageSize.width - 2, kImageSize.height - 9);
     List<int> shuffled = shuffleBlocks();
@@ -56,7 +62,6 @@ class BoardController extends ChangeNotifier {
 
   void resetBoardController() {
     // enabled = true;
-    winState = false;
     initializeBoard();
     notifyListeners();
   }
@@ -85,6 +90,7 @@ class BoardController extends ChangeNotifier {
   // if both are adjecaent to each other makes the move
   Future<void> detectAndMove(Offset point) async {
     if (enabled) {
+      movesCount += 1;
       int? sourceBlockIndex = _getBlockIndex(point);
       int? targetBlockIndex = _getEmptyBlockIndex();
       if (sourceBlockIndex != null && targetBlockIndex != null) {
@@ -141,9 +147,12 @@ class BoardController extends ChangeNotifier {
 
   bool checkForWin() {
     bool won = true;
+    cps = 0;
     for (var element in blocks) {
       if (element.currentPlace != element.truePlace) {
         won = false;
+      } else {
+        cps += 1;
       }
     }
     return won;
@@ -192,5 +201,11 @@ class BoardController extends ChangeNotifier {
 
   Offset _cartesianToIsometric(Offset point) {
     return Offset(point.dx - point.dy, (point.dx + point.dy) / 2);
+  }
+
+  void changeGameState() {
+    enabled = !enabled;
+    gameStarted = enabled;
+    notifyListeners();
   }
 }
