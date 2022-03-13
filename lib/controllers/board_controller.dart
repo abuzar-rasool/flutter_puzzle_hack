@@ -1,18 +1,22 @@
 // ignore_for_file: avoid_print
 
 import 'dart:math';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:puzzle_hack/controllers/sound_controller.dart';
 import 'package:puzzle_hack/model/block.dart';
 import 'package:puzzle_hack/constants.dart';
 import 'package:puzzle_hack/direction.dart';
 
 class BoardController extends ChangeNotifier {
-  // allows to control the touch on the board
+  SoundController soundController = SoundController();
+  bool dataLoaded = false;
+  int? soundId;
   bool enabled = false;
   bool winState = false;
   bool gameStarted = false;
   int movesCount = 0;
-  int cps = 0;   // correct placements
+  int cps = 0; // correct placements
   //position of the center block on the board
   late Offset _init;
   //the overlaps of the blocks on the board
@@ -20,15 +24,16 @@ class BoardController extends ChangeNotifier {
   //list of blocks on the board
   late List<Block> blocks = [];
 
-  BoardController() {
-    initializeBoard();
+  BoardController({BuildContext? context}) {
+    initializeBoard(context: context);
   }
 
-  void initializeBoard() {
+  void initializeBoard({BuildContext? context}) {
     winState = false;
     movesCount = 0;
     cps = 0;
-    _init = Offset(kBoardSize.width / 2 - kImageSize.width / 2, kBoardSize.height / 2 - kImageSize.height / 2);
+    _init = Offset(kBoardSize.height / 1.8 - kImageSize.height / 2, kBoardSize.height / 2 - kImageSize.height / 2);
+    print(_init);
     _offset = Offset(kImageSize.width - 2, kImageSize.height - 9);
     List<int> shuffled = shuffleBlocks();
     blocks = [
@@ -45,6 +50,17 @@ class BoardController extends ChangeNotifier {
       Block(globalPosition: Offset(_init.dx - _offset.dx / 2, _init.dy + _offset.dy / 2), currentPlace: shuffled[7], truePlace: 8),
       Block(globalPosition: Offset(_init.dx, _init.dy + _offset.dy), currentPlace: shuffled[8], truePlace: 9),
     ];
+    if (context != null) loadInitialData(context);
+  }
+
+  Future<void> loadInitialData(BuildContext context) async {
+    await soundController.loadSounds();
+    for (int i = 1; i < 9; i++) {
+      await precacheImage(AssetImage('assets/block-$i.png'), context).onError((error, stackTrace) => print('error loading image'));
+    }
+    changeGameState();
+    dataLoaded = true;
+    notifyListeners();
   }
 
   bool isSolvable(List<int> list) {
@@ -162,9 +178,10 @@ class BoardController extends ChangeNotifier {
   _move(int? fullBlockIndex, int? emptyBlockIndex, Direction direction) async {
     final fullBlock = blocks[fullBlockIndex!];
     final emptyBlock = blocks[emptyBlockIndex!];
+    final mag = Offset(80, 6.5);
     Offset movementOffset = Offset(
-      direction == Direction.left || direction == Direction.right ? 80 : 6.5,
-      direction == Direction.left || direction == Direction.right ? 6.5 : 80,
+      direction == Direction.left || direction == Direction.right ? mag.dx : mag.dy,
+      direction == Direction.left || direction == Direction.right ? mag.dy : mag.dx,
     );
     if (direction == Direction.right || direction == Direction.down) {
       movementOffset = -movementOffset;
@@ -183,6 +200,8 @@ class BoardController extends ChangeNotifier {
     emptyBlock.localPosition = _cartesianToIsometric(Offset.zero);
     fullBlock.localPosition = _cartesianToIsometric(-movementOffset);
     notifyListeners();
+    //playing sound
+    soundController.playTileMovementSound(rate: 2);
     await Future.delayed(const Duration(milliseconds: 300));
     fullBlock.animate = false;
     notifyListeners();
@@ -207,5 +226,20 @@ class BoardController extends ChangeNotifier {
     enabled = !enabled;
     gameStarted = enabled;
     notifyListeners();
+  }
+
+  double getBoardScale(BuildContext context) {
+    double minScale = 1.1;
+    double maxScale = 1.5;
+    double width = MediaQuery.of(context).size.width;
+    if (width == 500) {
+      return minScale;
+    }
+    double scale = minScale + (maxScale - minScale) * (width - 500) / (1000 - 500);
+    if (scale > maxScale) {
+      return maxScale;
+    } else {
+      return scale;
+    }
   }
 }

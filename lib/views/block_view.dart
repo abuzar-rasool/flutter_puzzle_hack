@@ -14,8 +14,8 @@ class BlockView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final blockController = context.watch<BoardController>();
-    final block = blockController.blocks[index];
+    final boardController = context.watch<BoardController>();
+    final block = boardController.blocks[index];
     return Positioned(
       top: block.globalPosition.dy,
       left: block.globalPosition.dx,
@@ -33,6 +33,7 @@ class BlockView extends StatelessWidget {
                 top: block.localPosition.dy,
                 left: block.localPosition.dx,
                 duration: block.animate ? const Duration(milliseconds: 300) : Duration.zero,
+                curve: Curves.easeInCubic,
                 child: Image.asset(
                   block.imageName ?? 'assets/empty.png',
                   fit: BoxFit.contain,
