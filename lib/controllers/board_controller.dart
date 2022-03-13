@@ -18,6 +18,10 @@ class BoardController extends ChangeNotifier {
   late List<Block> blocks = [];
 
   BoardController() {
+    initializeBoard();
+  }
+
+  void initializeBoard() {
     _init = Offset(kBoardSize.width / 2 - kImageSize.width / 2, kBoardSize.height / 2 - kImageSize.height / 2);
     _offset = Offset(kImageSize.width - 2, kImageSize.height - 9);
     List<int> shuffled = shuffleBlocks();
@@ -39,7 +43,7 @@ class BoardController extends ChangeNotifier {
 
   bool isSolvable(List<int> list) {
     int count = 0;
-    int emptyVal = 8;
+    int emptyVal = 9;
     for (int i = 0; i < list.length; i++) {
       for (int j = i + 1; j < list.length; j++) {
         if (list[i] > list[j] && list[j] != emptyVal && list[i] != emptyVal) {
@@ -51,10 +55,9 @@ class BoardController extends ChangeNotifier {
   }
 
   void resetBoardController() {
-    enabled = true;
+    // enabled = true;
     winState = false;
-    blocks = [];
-    BoardController();
+    initializeBoard();
     notifyListeners();
   }
 

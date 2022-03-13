@@ -38,26 +38,22 @@ class _BoardViewState extends State<BoardView> {
             return AlertDialog(
               title: Text("You Won!"),  
               content: Text("This is an alert message."),
+              actions: [
+                TextButton(
+                  child: Text("Play again"),
+                  onPressed: () {
+                    context.read<BoardController>().resetBoardController();
+                    // Navigator.pop(context);
+                  },
+                ),
+              ],
             );
           }
-          return Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                ResponsiveWrapper(
-                  backgroundColor: Color.fromARGB(255, 36, 36, 36).withOpacity(1),
-                  maxWidth: 2460,
-                  minWidth: 400,
-                  defaultScale: true,
-                  breakpoints: const [
-                    ResponsiveBreakpoint.resize(400, name: MOBILE),
-                    ResponsiveBreakpoint.resize(800, name: TABLET),
-                    ResponsiveBreakpoint.resize(1000, name: DESKTOP),
-                    ResponsiveBreakpoint.resize(2460, name: '4K'),
-                  ],
-                  child: AbsorbPointer(
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: AbsorbPointer(
                     absorbing: !context.watch<BoardController>().enabled,
                     child: Container(
                       color: Color.fromARGB(255, 36, 36, 36).withOpacity(1),
@@ -75,9 +71,8 @@ class _BoardViewState extends State<BoardView> {
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
+              ),
+            ],
           );
         });
   }
