@@ -11,7 +11,7 @@ class HomeView extends StatelessWidget {
       theme: ThemeData(fontFamily: "HammersmithOne"),
       home: Container(
         decoration: const BoxDecoration(
-            gradient: LinearGradient(begin: Alignment.topCenter, end: Alignment.bottomCenter, colors: [Color(0xff252532), Color(0xff191920)])),
+            gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: [Color(0xff252532), Color(0xff191920)], stops: [0, 10])),
         child: const Scaffold(
           backgroundColor: Colors.transparent,
           body: BoardView(),

@@ -22,7 +22,9 @@ class BlockView extends StatelessWidget {
       child: AbsorbPointer(
         absorbing: !context.watch<BoardController>().enabled,
         child: Container(
-          color: block.color,
+          decoration: BoxDecoration(
+            color: block.color,
+          ),
           width: kImageSize.width,
           height: kImageSize.height,
           child: Stack(
