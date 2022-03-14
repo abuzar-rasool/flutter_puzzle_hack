@@ -35,7 +35,7 @@ class BlockView extends StatelessWidget {
                 top: block.localPosition.dy,
                 left: block.localPosition.dx,
                 duration: block.animate ? const Duration(milliseconds: 300) : Duration.zero,
-                curve: Curves.easeInCubic,
+                curve: Curves.easeInExpo,
                 child: Image.asset(
                   block.imageName ?? 'assets/empty.png',
                   fit: BoxFit.contain,
