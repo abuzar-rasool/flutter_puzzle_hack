@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:puzzle_hack/constants.dart';
 import 'package:puzzle_hack/controllers/board_controller.dart';
 import 'package:puzzle_hack/views/block_view.dart';
+import 'package:puzzle_hack/views/widgets/primary_button.dart';
 
 class BoardView extends StatefulWidget {
   const BoardView({
@@ -88,36 +89,50 @@ class _BoardViewState extends State<BoardView> {
                   ),
                 ),
               ),
-              Flexible(
-                  child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    child: Text(
-                      "SUMMARY",
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.white,
+                  Container(
+                    width: kBoardSize.width,
+                    // height: 80,
+                    padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height*0.035, horizontal:0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children:  [
+                        Flexible(
+                          flex: 1,
+                          child: SummaryButton(
+                            textPrimary: "TOTAL",
+                            textSecondary: "MOVES",
+                            counts: context.read<BoardController>().movesCount.toString(),
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Flexible(
+                      flex: 1,
+                      child: Container(
+                          width: 400,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.contain,
+                              image: AssetImage("assets/solved.png"),
+                            ),
+                          ),
+                        )
                       ),
+                      SizedBox(width: 20),
+                          Flexible(
+                      flex: 1,
+                      child: SummaryButton(
+                        textPrimary: "CORRECT",
+                        textSecondary: "POSITIONS",
+                        counts: context.read<BoardController>().cps.toString(),
+                        ),
+                        ),
+                        
+                      
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Flexible(
-                    flex: 1,
-                    child: Text(
-                      "Moves: ${context.read<BoardController>().movesCount}\nCPs: ${context.read<BoardController>().cps}",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Color.fromARGB(255, 185, 185, 185),
-                      ),
-                    ),
-                  ),
-                ],
-              )),
             ],
           );
         });
