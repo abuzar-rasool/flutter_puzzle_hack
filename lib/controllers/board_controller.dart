@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'dart:math';
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:puzzle_hack/controllers/sound_controller.dart';
 import 'package:puzzle_hack/model/block.dart';
@@ -189,12 +188,13 @@ class BoardController extends ChangeNotifier {
     print('------------------');
     print("Moving $fullBlockIndex to $emptyBlockIndex in direction $direction");
     //taking the empty block to the current full block.
+    fullBlock.hover = false;
     enabled = false;
     emptyBlock.animate = false;
     emptyBlock.localPosition = _cartesianToIsometric(movementOffset);
     emptyBlock.imageName = fullBlock.imageName;
     notifyListeners();
-    await Future.delayed(const Duration(milliseconds: 50));
+    await Future.delayed(const Duration(milliseconds: 150));
     //move the empty block to the target block position.
     emptyBlock.animate = true;
     emptyBlock.localPosition = _cartesianToIsometric(Offset.zero);
@@ -242,5 +242,20 @@ class BoardController extends ChangeNotifier {
     } else {
       return scale;
     }
+  }
+
+  void onHover(Offset position) {
+    //loop over boards
+    for (var block in blocks) {
+      if (enabled && block.containsPoint(position) && !block.empty) {
+        if (!block.hover) {
+          soundController.playBlockHoverSound(rate: 1);
+        }
+        block.hover = true;
+      } else {
+        block.hover = false;
+      }
+    }
+    notifyListeners();
   }
 }

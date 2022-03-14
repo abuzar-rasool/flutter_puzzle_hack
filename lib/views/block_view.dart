@@ -17,7 +17,7 @@ class BlockView extends StatelessWidget {
     final boardController = context.watch<BoardController>();
     final block = boardController.blocks[index];
     return Positioned(
-      top: block.globalPosition.dy,
+      top: block.globalPosition.dy + (block.hover ? 0 : 5),
       left: block.globalPosition.dx,
       child: AbsorbPointer(
         absorbing: !context.watch<BoardController>().enabled,
@@ -25,8 +25,8 @@ class BlockView extends StatelessWidget {
           decoration: BoxDecoration(
             color: block.color,
           ),
-          width: kImageSize.width,
-          height: kImageSize.height,
+          width: kImageSize.width + 5,
+          height: kImageSize.height + 5,
           child: Stack(
             fit: StackFit.loose,
             clipBehavior: Clip.hardEdge,

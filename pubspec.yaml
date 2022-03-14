@@ -73,6 +73,7 @@ flutter:
     - assets/title.flr
     - assets/tile_movement_sound.mp3
     - assets/winning_sound.wav
+    - assets/tile_hover.wav
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

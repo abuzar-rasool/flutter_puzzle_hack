@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:puzzle_hack/constants.dart';
 import 'package:puzzle_hack/helper_functions.dart';
 
-class Block{
+class Block {
+  bool hover = false;
   bool animate = true;
   final Offset globalPosition;
   String? imageName;
@@ -16,7 +17,6 @@ class Block{
       : localPosition = Offset.zero,
         color = HelperFunctions.randomColor().withOpacity(kBlockOpacity),
         imageName = currentPlace == 9 ? null : "block-$currentPlace.png";
-
 
   bool containsPoint(Offset point) {
     List<Offset> polygon = [

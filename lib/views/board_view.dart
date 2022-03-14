@@ -73,14 +73,17 @@ class _BoardViewState extends State<BoardView> {
                         alignment: Alignment.center,
                         width: kBoardSize.width,
                         height: kBoardSize.height,
-                        child: GestureDetector(
-                          onTapDown: (TapDownDetails details) async {
-                            if (context.read<BoardController>().enabled) {
-                              await context.read<BoardController>().detectAndMove(details.localPosition);
-                            }
-                          },
-                          child: Stack(
-                            children: generateBlockViews(),
+                        child: MouseRegion(
+                          onHover: (event) => context.read<BoardController>().onHover(event.localPosition),
+                          child: GestureDetector(
+                            onTapDown: (TapDownDetails details) async {
+                              if (context.read<BoardController>().enabled) {
+                                await context.read<BoardController>().detectAndMove(details.localPosition);
+                              }
+                            },
+                            child: Stack(
+                              children: generateBlockViews(),
+                            ),
                           ),
                         ),
                       ),
