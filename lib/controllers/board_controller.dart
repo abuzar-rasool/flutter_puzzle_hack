@@ -215,6 +215,7 @@ class BoardController extends ChangeNotifier {
     fullBlock.currentPlace = 9;
     enabled = true;
     winState = checkForWin();
+    if (winState) soundController.playWinningSound(rate: 2);
     notifyListeners();
   }
 

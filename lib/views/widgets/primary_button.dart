@@ -19,7 +19,7 @@ class PrimaryButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(5),
           boxShadow: [
             BoxShadow(
-              color: Color.fromARGB(255, 32, 26, 56).withOpacity(1),
+              color: const Color.fromARGB(255, 32, 26, 56).withOpacity(1),
               spreadRadius: 1,
               blurRadius: 3,
               offset: const Offset(0, 0), // changes position of shadow

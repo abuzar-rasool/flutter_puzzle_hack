@@ -6,11 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:puzzle_hack/constants.dart';
 import 'package:puzzle_hack/controllers/board_controller.dart';
 import 'package:puzzle_hack/views/block_view.dart';
-import 'package:puzzle_hack/views/widgets/primary_button.dart';
-import 'package:responsive_framework/responsive_row_column.dart';
-import 'package:responsive_framework/responsive_value.dart';
-import 'package:responsive_framework/responsive_wrapper.dart';
-import 'package:responsive_framework/utils/responsive_utils.dart';
 
 class BoardView extends StatefulWidget {
   const BoardView({
@@ -53,7 +48,6 @@ class _BoardViewState extends State<BoardView> {
           }
           if (context.watch<BoardController>().winState) {
             context.read<BoardController>().gameStarted = false;
-            context.read<BoardController>().enabled = false;
             context.read<BoardController>().resetBoardController();
           }
           return Column(
