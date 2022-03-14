@@ -131,7 +131,7 @@ class _BoardViewState extends State<BoardView> {
                           decoration: BoxDecoration(
                             image: DecorationImage(
                               fit: BoxFit.contain,
-                              image: AssetImage("assets/solved.png"),
+                              image: NetworkImage(kImages['empty']),
                             ),
                           ),
                         )

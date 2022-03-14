@@ -57,7 +57,11 @@ class BoardController extends ChangeNotifier {
     // for (int i = 1; i < 9; i++) {
     //   await precacheImage(Image.network(''), context).onError((error, stackTrace) => print('error loading image'));
     // }
-    await precacheImage(const NetworkImage('https://ae01.alicdn.com/kf/HTB16usCe3mH3KVjSZKzq6z2OXXam/Hot-New-Women-s-Men-s-Finished-Myopia-Glasses-Short-Sight-Eyewear-Black-100-150-200.jpg'), context);
+
+    for (String images in kImages.keys) {
+      await precacheImage(NetworkImage(kImages[images]), context).onError((error, stackTrace) => print('error loading image'));
+    }
+   
     changeGameState();
     dataLoaded = true;
     notifyListeners();
