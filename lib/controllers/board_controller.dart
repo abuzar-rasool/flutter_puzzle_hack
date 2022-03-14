@@ -230,7 +230,7 @@ class BoardController extends ChangeNotifier {
 
   double getBoardScale(BuildContext context) {
     double minScale = 1.1;
-    double maxScale = 1.5;
+    double maxScale = 1.4;
     double width = MediaQuery.of(context).size.width;
     if (width == 500) {
       return minScale;

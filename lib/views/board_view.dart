@@ -72,7 +72,7 @@ class _BoardViewState extends State<BoardView> {
                 flex: 3,
                 child: Center(
                   child: Transform.scale(
-                    scale: context.watch<BoardController>().getBoardScale(context),
+                    scale: context.read<BoardController>().getBoardScale(context),
                     child: AbsorbPointer(
                       absorbing: !context.watch<BoardController>().enabled,
                       child: Container(
@@ -96,8 +96,8 @@ class _BoardViewState extends State<BoardView> {
               ),
               Flexible(
                   child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Flexible(
                     flex: 1,
@@ -109,10 +109,13 @@ class _BoardViewState extends State<BoardView> {
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Flexible(
                     flex: 1,
                     child: Text(
-                      "\nMoves: ${context.read<BoardController>().movesCount}\nCPs: ${context.read<BoardController>().cps}\n",
+                      "Moves: ${context.read<BoardController>().movesCount}\nCPs: ${context.read<BoardController>().cps}",
                       style: TextStyle(
                         fontSize: 18,
                         color: Color.fromARGB(255, 185, 185, 185),
