@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:puzzle_hack/views/board_view.dart';
-import 'package:responsive_framework/responsive_framework.dart';
 
 class HomeView extends StatelessWidget {
   const HomeView({Key? key}) : super(key: key);

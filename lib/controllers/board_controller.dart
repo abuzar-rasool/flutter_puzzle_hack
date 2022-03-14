@@ -57,6 +57,7 @@ class BoardController extends ChangeNotifier {
     for (int i = 1; i < 9; i++) {
       await precacheImage(AssetImage('assets/block-$i.png'), context).onError((error, stackTrace) => print('error loading image'));
     }
+    await precacheImage(const AssetImage('assets/solved.png'), context);
     changeGameState();
     dataLoaded = true;
     notifyListeners();
