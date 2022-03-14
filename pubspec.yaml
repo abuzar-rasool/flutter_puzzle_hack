@@ -63,20 +63,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/block-1.png
-    - assets/block-2.png
-    - assets/block-3.png
-    - assets/block-4.png
-    - assets/block-5.png
-    - assets/block-6.png
-    - assets/block-7.png
-    - assets/block-8.png
-    - assets/empty.png
-    - assets/title.flr
-    - assets/tile_movement_sound.mp3
-    - assets/winning_sound.wav
-    - assets/tile_hover.wav
-    - assets/solved.png
+    - assets/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

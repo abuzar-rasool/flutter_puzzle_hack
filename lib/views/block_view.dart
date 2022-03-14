@@ -38,7 +38,7 @@ class BlockView extends StatelessWidget {
                 curve: Curves.easeInExpo,
                 child: Image.network(
                   // block.imageName ?? 'assets/empty.png',
-                  'https://ae01.alicdn.com/kf/HTB16usCe3mH3KVjSZKzq6z2OXXam/Hot-New-Women-s-Men-s-Finished-Myopia-Glasses-Short-Sight-Eyewear-Black-100-150-200.jpg',
+                  'https://i.imgur.com/FH1b7q6.png',
                   fit: BoxFit.contain,
                   width: kImageSize.width,
                   height: kImageSize.height,
