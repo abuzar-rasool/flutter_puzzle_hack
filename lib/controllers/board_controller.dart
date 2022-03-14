@@ -1,6 +1,7 @@
 // ignore_for_file: avoid_print
 
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:puzzle_hack/controllers/sound_controller.dart';
 import 'package:puzzle_hack/model/block.dart';
@@ -31,7 +32,7 @@ class BoardController extends ChangeNotifier {
     winState = false;
     movesCount = 0;
     cps = 0;
-    _init = Offset(kBoardSize.height / 1.8 - kImageSize.height / 2, kBoardSize.height / 2 - kImageSize.height / 2);
+    _init = Offset(kBoardSize.height / 2.2 - kImageSize.height / 2, kBoardSize.height / 2 - kImageSize.height / 2);
     print(_init);
     _offset = Offset(kImageSize.width - 2, kImageSize.height - 9);
     List<int> shuffled = shuffleBlocks();
@@ -61,7 +62,7 @@ class BoardController extends ChangeNotifier {
     for (String images in kImages.keys) {
       await precacheImage(NetworkImage(kImages[images]), context).onError((error, stackTrace) => print('error loading image'));
     }
-   
+
     changeGameState();
     dataLoaded = true;
     notifyListeners();
@@ -235,7 +236,7 @@ class BoardController extends ChangeNotifier {
   }
 
   double getBoardScale(BuildContext context) {
-    double minScale = 1.1;
+    double minScale = 0.9;
     double maxScale = 1.4;
     double width = MediaQuery.of(context).size.width;
     if (width == 500) {
@@ -251,16 +252,18 @@ class BoardController extends ChangeNotifier {
 
   void onHover(Offset position) {
     //loop over boards
-    for (var block in blocks) {
-      if (enabled && block.containsPoint(position) && !block.empty) {
-        if (!block.hover) {
-          soundController.playBlockHoverSound(rate: 1);
+    if (kIsWeb) {
+      for (var block in blocks) {
+        if (enabled && block.containsPoint(position) && !block.empty) {
+          if (!block.hover) {
+            soundController.playBlockHoverSound(rate: 1);
+          }
+          block.hover = true;
+        } else {
+          block.hover = false;
         }
-        block.hover = true;
-      } else {
-        block.hover = false;
       }
+      notifyListeners();
     }
-    notifyListeners();
   }
 }

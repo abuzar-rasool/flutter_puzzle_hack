@@ -12,7 +12,7 @@ class HomeView extends StatelessWidget {
         decoration: const BoxDecoration(gradient: RadialGradient(colors: [Color(0xff535362), Color(0xff1a1a22)], radius: 1, focalRadius: 1)),
         child: const Scaffold(
           backgroundColor: Colors.transparent,
-          body: BoardView(),
+          body: SafeArea(child: BoardView()),
         ),
       ),
     );

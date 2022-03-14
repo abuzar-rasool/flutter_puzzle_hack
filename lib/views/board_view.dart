@@ -51,12 +51,21 @@ class _BoardViewState extends State<BoardView> {
           if (context.watch<BoardController>().winState) {
             context.read<BoardController>().gameStarted = false;
             return AlertDialog(
-              backgroundColor: Color(0xff1a1a22).withOpacity(0.6),
-                title: Text("Good Job! You Win!", style: TextStyle(color: Colors.white),),
-                content: Text("You solved the puzzle! Tap the button to play again.", style: TextStyle(color: Colors.white),),
+                backgroundColor: Color(0xff1a1a22).withOpacity(0.6),
+                title: Text(
+                  "Good Job! You Win!",
+                  style: TextStyle(color: Colors.white),
+                ),
+                content: Text(
+                  "You solved the puzzle! Tap the button to play again.",
+                  style: TextStyle(color: Colors.white),
+                ),
                 actions: [
                   TextButton(
-                    child: Text("Play Again",  style: TextStyle(color: Colors.white),),
+                    child: Text(
+                      "Play Again",
+                      style: TextStyle(color: Colors.white),
+                    ),
                     onPressed: () {
                       context.read<BoardController>().resetBoardController();
                       // Navigator.pop(context);
@@ -97,6 +106,8 @@ class _BoardViewState extends State<BoardView> {
                               }
                             },
                             child: Stack(
+                              clipBehavior: Clip.none,
+                              fit: StackFit.expand,
                               children: generateBlockViews(),
                             ),
                           ),
@@ -106,50 +117,40 @@ class _BoardViewState extends State<BoardView> {
                   ),
                 ),
               ),
-                  Container(
-                    width: kBoardSize.width,
-                    // height: 80,
-                    padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height*0.035, horizontal:0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children:  [
-                        Flexible(
-                          flex: 1,
-                          child: SummaryButton(
-                            textPrimary: "TOTAL",
-                            textSecondary: "MOVES",
-                            counts: context.read<BoardController>().movesCount.toString(),
-                            ),
-                          ),
-                          SizedBox(width: 20),
-                          Flexible(
-                      flex: 1,
-                      child: Container(
-                          width: 400,
-                          height: 200,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.contain,
-                              image: NetworkImage(kImages['solved']),
-                            ),
-                          ),
-                        )
-                      ),
-                      SizedBox(width: 20),
-                          Flexible(
-                      flex: 1,
-                      child: SummaryButton(
-                        textPrimary: "CORRECT",
-                        textSecondary: "POSITIONS",
-                        counts: context.read<BoardController>().cps.toString(),
-                        ),
-                        ),
-                        
-                      
-                      ],
+              Container(
+                width: MediaQuery.of(context).size.width,
+                // height: 80,
+                padding: EdgeInsets.symmetric(vertical: MediaQuery.of(context).size.height * 0.035, horizontal: 8),
+                child: Wrap(
+                  alignment: WrapAlignment.center,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  runAlignment: WrapAlignment.center,
+                  children: [
+                    SummaryButton(
+                      textPrimary: "TOTAL",
+                      textSecondary: "MOVES",
+                      counts: context.read<BoardController>().movesCount.toString(),
                     ),
-                  ),
+                    SizedBox(width: 20),
+                    Container(
+                      width: 150,
+                      height: 150,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          fit: BoxFit.contain,
+                          image: NetworkImage(kImages['solved']),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 20),
+                    SummaryButton(
+                      textPrimary: "CORRECT",
+                      textSecondary: "POSITIONS",
+                      counts: context.read<BoardController>().cps.toString(),
+                    ),
+                  ],
+                ),
+              ),
             ],
           );
         });
