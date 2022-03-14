@@ -1,4 +1,4 @@
-# puzzle_hack
+# Sliding puzzle 3d (Flutter Puzzle Hack Submission)
 
 A new Flutter project.
 
