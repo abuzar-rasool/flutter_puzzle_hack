@@ -55,9 +55,9 @@ class BoardController extends ChangeNotifier {
   Future<void> loadInitialData(BuildContext context) async {
     await soundController.loadSounds();
     // for (int i = 1; i < 9; i++) {
-    //   await precacheImage(AssetImage('assets/block-$i.png'), context).onError((error, stackTrace) => print('error loading image'));
+    //   await precacheImage(Image.network(''), context).onError((error, stackTrace) => print('error loading image'));
     // }
-    // await precacheImage(const AssetImage('assets/solved.png'), context);
+    await precacheImage(const NetworkImage('https://ae01.alicdn.com/kf/HTB16usCe3mH3KVjSZKzq6z2OXXam/Hot-New-Women-s-Men-s-Finished-Myopia-Glasses-Short-Sight-Eyewear-Black-100-150-200.jpg'), context);
     changeGameState();
     dataLoaded = true;
     notifyListeners();

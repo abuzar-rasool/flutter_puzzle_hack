@@ -36,8 +36,9 @@ class BlockView extends StatelessWidget {
                 left: block.localPosition.dx,
                 duration: block.animate ? const Duration(milliseconds: 300) : Duration.zero,
                 curve: Curves.easeInExpo,
-                child: Image.asset(
-                  block.imageName ?? 'assets/empty.png',
+                child: Image.network(
+                  // block.imageName ?? 'assets/empty.png',
+                  'https://ae01.alicdn.com/kf/HTB16usCe3mH3KVjSZKzq6z2OXXam/Hot-New-Women-s-Men-s-Finished-Myopia-Glasses-Short-Sight-Eyewear-Black-100-150-200.jpg',
                   fit: BoxFit.contain,
                   width: kImageSize.width,
                   height: kImageSize.height,
