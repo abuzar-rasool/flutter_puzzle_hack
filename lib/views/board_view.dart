@@ -7,6 +7,7 @@ import 'package:puzzle_hack/constants.dart';
 import 'package:puzzle_hack/controllers/board_controller.dart';
 import 'package:puzzle_hack/views/block_view.dart';
 import 'package:puzzle_hack/views/widgets/primary_button.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class BoardView extends StatefulWidget {
   const BoardView({
@@ -49,7 +50,20 @@ class _BoardViewState extends State<BoardView> {
           }
           if (context.watch<BoardController>().winState) {
             context.read<BoardController>().gameStarted = false;
-            context.read<BoardController>().resetBoardController();
+            return AlertDialog(
+              backgroundColor: Color(0xff1a1a22).withOpacity(0.6),
+                title: Text("Good Job! You Win!", style: TextStyle(color: Colors.white),),
+                content: Text("You solved the puzzle! Tap the button to play again.", style: TextStyle(color: Colors.white),),
+                actions: [
+                  TextButton(
+                    child: Text("Play Again",  style: TextStyle(color: Colors.white),),
+                    onPressed: () {
+                      context.read<BoardController>().resetBoardController();
+                      // Navigator.pop(context);
+                    },
+                  )
+                ]);
+            // context.read<BoardController>().resetBoardController();
           }
           return Column(
             children: [

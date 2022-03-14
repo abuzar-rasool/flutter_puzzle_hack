@@ -35,7 +35,7 @@ class SoundController {
 
   Future<void> playBlockHoverSound({double rate = 1}) async {
     if (_blockHoverSound != null) {
-      _pool.stop(_blockHoverSound!);
+      // _pool.stop(_blockHoverSound!);
       await _pool.play(_blockHoverSound!, rate: rate);
     }
   }
