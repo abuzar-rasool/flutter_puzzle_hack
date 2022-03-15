@@ -1,8 +1,8 @@
 # Sliding puzzle 3d (Flutter Puzzle Hack Submission)
 
 ## Try It Out
-- [Sliding Puzzle 3d (Netlify)](https://flutter.dev/docs/get-started/codelab)
-- [Sliding Puzzle 3d (Codemagic)](https://flutter.dev/docs/get-started/codelab)
+- [Sliding Puzzle 3d (Netlify)](https://sliding-puzzle-3d.netlify.app/)
+- [Sliding Puzzle 3d (Codemagic)](https://sliding_puzzle_3d.codemagic.app)
 
 ## Supported Platforms
 - Web
