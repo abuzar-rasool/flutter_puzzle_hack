@@ -1,6 +1,16 @@
 # Sliding puzzle 3d (Flutter Puzzle Hack Submission)
 
-A new Flutter project.
+## Try It Out
+- [Sliding Puzzle 3d (Netlify)](https://flutter.dev/docs/get-started/codelab)
+- [Sliding Puzzle 3d (Codemagic)](https://flutter.dev/docs/get-started/codelab)
+
+## Supported Platforms
+- Web
+- Android
+- iOS
+- Windows
+- MacOS
+- Linux
 
 ## Getting Started
 
